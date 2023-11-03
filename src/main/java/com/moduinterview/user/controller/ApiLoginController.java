@@ -6,7 +6,6 @@ import com.moduinterview.common.model.ResponseResult;
 import com.moduinterview.common.model.ServiceResult;
 import com.moduinterview.user.component.JwtTokenProvider;
 import com.moduinterview.user.dto.LoginRequestDto;
-import com.moduinterview.user.dto.SignUpInput;
 import com.moduinterview.user.dto.TokenResponseDto;
 import com.moduinterview.user.service.LoginServiceImpl;
 import com.moduinterview.user.service.UserServiceImpl;
@@ -57,10 +56,10 @@ public class ApiLoginController {
   }
 
   // 로그아웃
-  @GetMapping("/signout")
-  public ResponseEntity<?> signOut(@RequestBody @Valid SignUpInput signUpInput, Errors errors) {
-    return null;
-  }
+//  @GetMapping("/signout")
+//  public ResponseEntity<?> signOut(@RequestBody @Valid SignUpInput signUpInput, Errors errors) {
+//    return null;
+//  }
   // Member List
 
 //  // Member Detail

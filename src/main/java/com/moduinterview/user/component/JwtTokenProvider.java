@@ -109,7 +109,7 @@ public class JwtTokenProvider {
 
   //Token 생성
 
-  //토큰 유효성 검사(형식)
+  //토큰 해석
   public String resolveTokenFromRequest(HttpServletRequest request) {
     String token = request.getHeader(TOKEN_HEADER);
     if (!ObjectUtils.isEmpty(token) && token.toLowerCase()
@@ -119,7 +119,7 @@ public class JwtTokenProvider {
     return null;
   }
 
-  //토큰 유효성 검사(만료)
+  //토큰 유효성 검사
   public boolean validateToken(String token) {
 
     if (!StringUtils.hasText(token)) {
