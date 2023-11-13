@@ -1,6 +1,12 @@
 package com.moduinterview.common.config;
 
 import com.fasterxml.classmate.TypeResolver;
+import com.moduinterview.interview.dto.CommentResponseDto;
+import com.moduinterview.interview.dto.InterviewListResponseDto;
+import com.moduinterview.interview.dto.InterviewResult;
+import com.moduinterview.interview.enums.InterviewType;
+import com.moduinterview.user.dto.UpdateUserRequestDto;
+import com.moduinterview.user.service.UserInfoResponseDto;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +31,13 @@ public class SwaggerConfig {
   public Docket api(TypeResolver typeResolver) {
     return new Docket(DocumentationType.OAS_30)
 
+        .additionalModels(typeResolver.resolve(CommentResponseDto.class))
+        .additionalModels(typeResolver.resolve(InterviewType.class))
+        .additionalModels(typeResolver.resolve(InterviewListResponseDto.class))
+        .additionalModels(typeResolver.resolve(InterviewResult.class))
+        .additionalModels(typeResolver.resolve(InterviewType.class))
+        .additionalModels(typeResolver.resolve(UserInfoResponseDto.class))
+        .additionalModels(typeResolver.resolve(UpdateUserRequestDto.class))
 //        .additionalModels(typeResolver.resolve(AccessTokenResponseDto.class))
 //        .additionalModels(typeResolver.resolve(ErrorResponse.class))
         .useDefaultResponseMessages(false)
@@ -32,7 +45,7 @@ public class SwaggerConfig {
         .select()
         .apis(RequestHandlerSelectors.basePackage("com.moduinterview.common.controller")
             .or(RequestHandlerSelectors.basePackage("com.moduinterview.interview.controller"))
-                .or(RequestHandlerSelectors.basePackage("com.moduinterview.user.controller")))
+            .or(RequestHandlerSelectors.basePackage("com.moduinterview.user.controller")))
         .paths(PathSelectors.any())
         .build()
 

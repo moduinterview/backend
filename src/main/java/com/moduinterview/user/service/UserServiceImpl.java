@@ -7,12 +7,15 @@ import com.moduinterview.user.component.JwtTokenProvider;
 import com.moduinterview.user.component.MailComponents;
 import com.moduinterview.user.dto.FindPasswordRequestDto;
 import com.moduinterview.user.dto.PasswordUpdateInput;
+import com.moduinterview.user.dto.UpdateUserRequestDto;
+import com.moduinterview.user.dto.UserResponse;
 import com.moduinterview.user.entity.User;
 import com.moduinterview.user.enums.OauthType;
 import com.moduinterview.user.enums.UserRole;
 import com.moduinterview.user.enums.UserStatus;
 import com.moduinterview.user.repository.UserRepository;
 import com.moduinterview.user.utility.PasswordUtils;
+import com.nimbusds.openid.connect.sdk.UserInfoResponse;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -100,22 +103,35 @@ public class UserServiceImpl {
 
     return ServiceResult.success("이메일 인증이 완료되었습니다.");
   }
-  public ServiceResult updatePassword(User user, PasswordUpdateInput input){
-    String encodedPassword = PasswordUtils.getEncodedPassword(input.getPassword());
-    user.setPassword(encodedPassword);
+
+  @Transactional
+  public ServiceResult updatePassword(HttpServletRequest request, PasswordUpdateInput input) {
+
+    User user = findUserFromRequest(request);
+
+    if (!PasswordUtils.isEqualPassword(input.getPassword(), user.getPassword())) {
+      return ServiceResult.fail("기존 비밀번호와 일치하지 않습니다.");
+    }
+    String newPassword = PasswordUtils.getEncodedPassword(input.getNewPassword());
+    user.setPassword(newPassword);
     userRepository.save(user);
     return ServiceResult.success("비밀번호가 변경되었습니다.");
   }
 
   @Transactional
   public ServiceResult updateUser(HttpServletRequest request,
-      @NotNull SignUpRequestDto requestDto) {
+      @NotNull UpdateUserRequestDto requestDto) {
     User user = findUserFromRequest(request);
+
     user.setPhone(requestDto.getPhone());
     user.setGender(requestDto.getGender());
     user.setName(requestDto.getUserName());
+
     userRepository.save(user);
-    return ServiceResult.success("회원정보가 수정되었습니다.");
+
+    UserResponse userResponse = UserResponse.getInformationOf(user);
+
+    return ServiceResult.success("회원정보가 수정되었습니다.", userResponse);
   }
 
   @Transactional
@@ -146,7 +162,7 @@ public class UserServiceImpl {
     if (!mailSendSuccess) {
       return ServiceResult.fail("임시비밀번호를 발급하였으나, 이메일 발송에 실패하였습니다.");
     }
-    return ServiceResult.success("임시비밀번호 메일이 발송되었습니다.");
+    return ServiceResult.success("임시비밀번호 메일이 발송되었습니다. "+ encryptedPassword + " 로 로그인해주세요.");
   }
 
 
@@ -164,5 +180,26 @@ public class UserServiceImpl {
         .orElseThrow(() -> new UserNotFoundException("회원정보가 존재하지 않습니다."));
   }
 
+
+  public ServiceResult detailUserInfo(HttpServletRequest request) {
+
+    User user = findUserFromRequest(request);
+    UserInfoResponseDto userInfoResponseOf = UserInfoResponseDto.createUserInfoResponseOf(user);
+
+    return ServiceResult.success("회원정보 조회에 성공하였습니다.", userInfoResponseOf);
+  }
+
+
+  public ServiceResult withdrawal(HttpServletRequest request) {
+    User user = findUserFromRequest(request);
+    user.setStatus(UserStatus.DELETED);
+    userRepository.save(user);
+    return ServiceResult.success("회원탈퇴가 완료되었습니다.");
+  }
+  @Transactional
+  public void updateUserProfileImage(User user, String profileImageUrl) {
+    user.setProfileImageUrl(profileImageUrl);
+    userRepository.save(user);
+  }
 
 }

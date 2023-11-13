@@ -1,7 +1,7 @@
 package com.moduinterview.interview.service;
 
 import com.moduinterview.common.model.ServiceResult;
-import com.moduinterview.interview.dto.InterviewForListDto;
+import com.moduinterview.interview.dto.InterviewListResponseDto;
 import com.moduinterview.interview.dto.InterviewInput;
 import com.moduinterview.interview.dto.InterviewResult;
 import com.moduinterview.interview.entity.Interview;
@@ -88,10 +88,10 @@ public class InterviewServiceImpl implements InterviewService {
     if (interviewList.isEmpty()) {
       return ServiceResult.fail("해당 사용자가 작성한 인터뷰가 없습니다.");
     }
-    List<InterviewForListDto> interviewForListDtoList = new ArrayList<>();
-    interviewList.forEach(interview -> interviewForListDtoList.add(
-        InterviewForListDto.createInterviewForListDtoFrom(interview)));
-    return ServiceResult.success(interviewForListDtoList);
+    List<InterviewListResponseDto> interviewListDtoListResponse = new ArrayList<>();
+    interviewList.forEach(interview -> interviewListDtoListResponse.add(
+        InterviewListResponseDto.createInterviewForListDtoFrom(interview)));
+    return ServiceResult.success(interviewListDtoListResponse);
   }
 
   @Override
@@ -101,11 +101,11 @@ public class InterviewServiceImpl implements InterviewService {
     if (interviewList.isEmpty()) {
       return ServiceResult.success("해당 타입의 인터뷰가 없습니다.");
     }
-    List<InterviewForListDto> interviewForListDtoList = new ArrayList<>();
-    interviewList.forEach(interview -> interviewForListDtoList.add(
-        InterviewForListDto.createInterviewForListDtoFrom(interview)));
+    List<InterviewListResponseDto> interviewListDtoListResponse = new ArrayList<>();
+    interviewList.forEach(interview -> interviewListDtoListResponse.add(
+        InterviewListResponseDto.createInterviewForListDtoFrom(interview)));
 
-    return ServiceResult.success(interviewForListDtoList);
+    return ServiceResult.success(interviewListDtoListResponse);
   }
 
   @Override
@@ -115,10 +115,10 @@ public class InterviewServiceImpl implements InterviewService {
     if (interviewList.isEmpty()) {
       return ServiceResult.success("해당 타입의 인터뷰가 없습니다.");
     }
-    List<InterviewForListDto> interviewForListDtoList = new ArrayList<>();
-    interviewList.forEach(interview -> interviewForListDtoList.add(
-        InterviewForListDto.createInterviewForListDtoFrom(interview)));
-    return ServiceResult.success(interviewForListDtoList);
+    List<InterviewListResponseDto> interviewListDtoListResponse = new ArrayList<>();
+    interviewList.forEach(interview -> interviewListDtoListResponse.add(
+        InterviewListResponseDto.createInterviewForListDtoFrom(interview)));
+    return ServiceResult.success(interviewListDtoListResponse);
   }
 
   @Override

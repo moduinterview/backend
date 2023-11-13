@@ -16,9 +16,10 @@ public class SignUpRequestDto {
   String email;
 
 
-  @Length(min = 8, max = 20, message = "비밀번호는 8자리 이상 20자리 이하로 작성해주세요.")
+  @Length(min = 8, max = 20, message = "비밀번호는 8자리 이상 20자리¡ 이하로 작성해주세요.")
   String password;
 
+  @NotBlank(message = "이름은 필수 항목입니다.")
   String userName;
 
   @Enumerated(javax.persistence.EnumType.STRING)

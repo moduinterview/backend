@@ -63,6 +63,8 @@ public class User implements UserDetails {
   @Length(min = 11, max = 11, message = "전화번호는 11자리로 작성해주세요.")
   private String phone;
 
+  private String profileImageUrl;
+
   @NotNull
   @Enumerated(javax.persistence.EnumType.STRING)
   private UserRole role;
