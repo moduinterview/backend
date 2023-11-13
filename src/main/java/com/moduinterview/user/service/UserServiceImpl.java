@@ -8,12 +8,14 @@ import com.moduinterview.user.component.MailComponents;
 import com.moduinterview.user.dto.FindPasswordRequestDto;
 import com.moduinterview.user.dto.PasswordUpdateInput;
 import com.moduinterview.user.dto.UpdateUserRequestDto;
+import com.moduinterview.user.dto.UserResponse;
 import com.moduinterview.user.entity.User;
 import com.moduinterview.user.enums.OauthType;
 import com.moduinterview.user.enums.UserRole;
 import com.moduinterview.user.enums.UserStatus;
 import com.moduinterview.user.repository.UserRepository;
 import com.moduinterview.user.utility.PasswordUtils;
+import com.nimbusds.openid.connect.sdk.UserInfoResponse;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -126,7 +128,10 @@ public class UserServiceImpl {
     user.setName(requestDto.getUserName());
 
     userRepository.save(user);
-    return ServiceResult.success("회원정보가 수정되었습니다.");
+
+    UserResponse userResponse = UserResponse.getInformationOf(user);
+
+    return ServiceResult.success("회원정보가 수정되었습니다.", userResponse);
   }
 
   @Transactional
@@ -191,4 +196,10 @@ public class UserServiceImpl {
     userRepository.save(user);
     return ServiceResult.success("회원탈퇴가 완료되었습니다.");
   }
+  @Transactional
+  public void updateUserProfileImage(User user, String profileImageUrl) {
+    user.setProfileImageUrl(profileImageUrl);
+    userRepository.save(user);
+  }
+
 }

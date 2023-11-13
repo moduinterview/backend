@@ -31,6 +31,7 @@ public class UserResponse {
   private UserRole role;
 
   private String zipCode;
+  private String profileImageUrl;
 
   private LocalDateTime regDate;
   private LocalDateTime modifiedDate;
@@ -41,6 +42,7 @@ public class UserResponse {
         .email(user.getEmail())
         .gender(user.getGender())
         .userName(user.getName())
+        .profileImageUrl(user.getProfileImageUrl())
         .oauthType(user.getOAuthType())
         .phone(user.getPhone())
         .regDate(user.getRegDate())
