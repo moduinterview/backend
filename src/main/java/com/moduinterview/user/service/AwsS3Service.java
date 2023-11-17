@@ -8,6 +8,7 @@ import com.moduinterview.user.dto.AwsS3Response;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.UUID;
 import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +21,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class AwsS3Service {
 
   @Value("${cloud.aws.s3.bucket}")
-  private final String bucket;
+  private  String bucket;
   @Value("${cloud.aws.s3.encrypt-key}")
-  private final String ENCRYPT_KEY;
+  private  String ENCRYPT_KEY;
   @Value("${cloud.aws.s3.limitation.max-file-size}")
-  private final int MAX_FILE_SIZE;
+  private int MAX_FILE_SIZE;
   @Value("${cloud.aws.s3.limitation.max-image-width}")
-  private final int MAX_IMAGE_WIDTH;
+  private int MAX_IMAGE_WIDTH;
   @Value("${cloud.aws.s3.limitation.max-image-height}")
-  private final int MAX_IMAGE_HEIGHT;
+  private int MAX_IMAGE_HEIGHT;
 
 
   private final AmazonS3 amazonS3;
@@ -45,11 +46,11 @@ public class AwsS3Service {
     }
 
     //파일 사이즈 확인
-    if (multipartFile.getSize() > 3145728L) {
+    if (multipartFile.getSize() > MAX_FILE_SIZE) {
       return ServiceResult.fail("3MB 이하의 파일만 업로드 가능합니다.");
     }
 
-    String ext = multipartFile.getOriginalFilename()
+    String ext = Objects.requireNonNull(multipartFile.getOriginalFilename())
         .substring(multipartFile.getOriginalFilename().lastIndexOf("."));
 
     //ext(확장자)의 검증
@@ -95,7 +96,7 @@ public class AwsS3Service {
     }
 
     ObjectMetadata objectMetadata = new ObjectMetadata();
-    objectMetadata.setContentType(multipartFile.getContentType());
+    objectMetadata.setContentType(contentType);
     objectMetadata.setContentLength(multipartFile.getSize());
 
 
