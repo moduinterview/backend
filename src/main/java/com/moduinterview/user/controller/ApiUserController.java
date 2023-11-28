@@ -142,7 +142,7 @@ public class ApiUserController {
     return ResponseResult.result(result);
   }
 
-  @Operation(summary = "유저 프로필 이미지 가져오기", description = "유저프로필 이미지 가져오기")
+  @Operation(summary = "유저 프로필 가져오기", description = "유저프로필 이미지 URL(S3) 가져오기")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "OK",
           content = @Content(schema = @Schema(implementation = AwsS3Response.class))),
